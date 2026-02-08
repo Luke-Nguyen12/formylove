@@ -61,5 +61,22 @@ function moveButton(btn) {
 
 // Celebration when she clicks Yes
 function celebrate() {
-    alert("Yay! I'm looking foward to it, my pretty girl! ❤️");
+    // 1. Select elements
+    const letterContainer = document.querySelector('.container');
+    const celebrationScreen = document.getElementById('celebration');
+    
+    // 2. Fade out the letter
+    letterContainer.style.transition = "opacity 1s ease";
+    letterContainer.style.opacity = "0";
+    
+    // 3. Wait 1s, then swap
+    setTimeout(() => {
+        letterContainer.style.display = "none"; 
+        celebrationScreen.style.display = "flex"; // Show new screen
+        
+        // Trigger fade-in
+        setTimeout(() => {
+            celebrationScreen.style.opacity = "1";
+        }, 50);
+    }, 1000);
 }
