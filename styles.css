@@ -31,8 +31,10 @@ body {
     perspective: 1000px; 
 }
 .letter {
-    width: 280px;
-    height: 380px;
+    width: 100%;
+    max-width: 500px;
+    min-height: 380px;
+    margin: 0 auto;
     background-color: #FFFDD0; /* Cream Envelope */
     border-radius: 8px;
     position: relative;
@@ -128,6 +130,13 @@ body {
     width: 100%;
     height: 100%;
     background-color: #fffbf7; /* [CHANGED] Slightly lighter paper color to stand out */
+    opacity: 0; 
+    z-index: 5;
+    
+    /* [FIX 2] Update transition to handle the fade in */
+    /* It waits 1s (while flap opens), then fades in over 0.5s */
+    transition: opacity 0.5s ease 1s, transform 1s ease 1s;
+
     box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* [ADDED] Shadow so the paper pops */
     border-radius: 8px;
     display: flex;
@@ -146,6 +155,7 @@ body {
 
 /* [OPTIONAL] Slides the paper up slightly when opened */
 .letter.opened .letter-content {
+    opacity: 1;
     transform: translateY(-10px);
 }
 
