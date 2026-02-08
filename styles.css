@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #87ae73;
+    z-index: -1;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* [ADDED] This is critical for 3D flips to look real! */
+    perspective: 1000px; 
+}
+.letter {
+    width: 280px;
+    height: 380px;
+    background-color: #FFFDD0; /* Cream Envelope */
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    
+    /* ANIMATION CHAIN for the Envelope Body */
+    /* When opened, we transition the background/shadow to transparent */
+    transition: transform 1s ease, 
+                background-color 0.5s ease 1s, /* Delay 1s (Step 3) */
+                box-shadow 0.5s ease 1s;       /* Delay 1s (Step 3) */
+                
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 2. The Flap (Triangle) */
+.letter::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 100px solid #EBE8C0; /* Flap Color */
+    border-radius: 8px 8px 0 0;
+    z-index: 10;
+    
+    /* Important for flipping */
+    transform-origin: top; 
+    
+    /* ANIMATION CHAIN for the Flap */
+    /* Transform (Flip) happens at 0.4s. Opacity (Fade) happens at 1s */
+    transition: transform 0.6s ease 0.4s, 
+                opacity 0.5s ease 1s; 
+}
+
+/* 3. The Heart Seal */
+.heart-seal {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    width: 30px;
+    height: 30px;
+    background-color: #FF69B4;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 11;
+    cursor: pointer;
+    
+    /* ANIMATION CHAIN for the Heart */
+    /* Fades immediately */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.heart-seal::before,
+.heart-seal::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #FF69B4;
+    border-radius: 50%;
+}
+.heart-seal::before { top: -15px; left: 0; }
+.heart-seal::after { left: 15px; top: 0; }
+
+/* --- THE OPENED STATES (The Triggers) --- */
+
+/* Step 1: Heart disappears */
+.letter.opened .heart-seal {
+    opacity: 0;
+    transform: translateX(-50%) rotate(-45deg) scale(0.5); /* Shrink effect */
+}
+
+/* Step 2: Flap Flips Up & Fades Out */
+.letter.opened::before {
+    transform: rotateX(180deg); /* Flip Up */
+    opacity: 0; /* Then Fade Away (delayed by CSS above) */
+    z-index: 1; /* Move behind letter */
+}
+
+/* Step 3: Envelope Body Fades Away */
+.letter.opened {
+    background-color: transparent; /* Body vanishes */
+    box-shadow: none; /* Shadow vanishes */
+    /* Note: We DO NOT use opacity:0 here, or the text inside would vanish too! */
+}
+.letter-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fffbf7; /* [CHANGED] Slightly lighter paper color to stand out */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* [ADDED] Shadow so the paper pops */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    
+    /* [FIXED] Removed rotateY(180deg) because we aren't flipping the card anymore! */
+    z-index: 5;
+    
+    /* [ADDED] Small slide-up animation when revealed */
+    transition: transform 1s ease 1s; 
+}
+
+/* [OPTIONAL] Slides the paper up slightly when opened */
+.letter.opened .letter-content {
+    transform: translateY(-10px);
+}
+
+/* Text Styling */
+.letter-header {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.letter-content p {
+    font-size: 24px;
+    color: #d81b60;
+    font-weight: bold;
+    margin: 10px 0;
+    letter-spacing: 1px;
+}
+
+.letter-content p.subtitle {
+    font-size: 14px;
+    color: #ff69b4;
+    margin-top: 30px;
+    animation: pulse 2s ease-in-out infinite;
+}
+.typing-cursor::after {
+    content: '|';
+    animation: blink 1s step-start infinite;
+}
+.response-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    /* Animation to fade them in smoothly */
+    animation: fadeBtn 1s ease forwards;
+}
+
+.btn-yes, .btn-no {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px; /* Pill shape */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Georgia', serif;
+}
+
+.btn-yes {
+    background-color: #ff69b4; /* Hot Pink */
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4);
+}
+
+.btn-yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.6);
+}
+
+.btn-no {
+    background-color: #f0f0f0;
+    color: #888;
+    position: relative; /* Needed for the 'run away' trick */
+}
+
+@keyframes fadeBtn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 20px 60px rgba(160, 50, 60, 0.3), 0 40px 80px rgba(135, 174, 115, 0.2);
+    }
+    50% {
+        box-shadow: 0 20px 80px rgba(160, 50, 60, 0.5), 0 40px 100px rgba(135, 174, 115, 0.4);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
