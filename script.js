@@ -22,7 +22,7 @@ let gameWon = false;
 let game2Won = false;
 
 // Default Volume
-if (music) { music.volume = 0.25; }
+if (music) { music.volume = 0.1; }
 if (yesAudio) { yesAudio.volume = 0.35; }
 
 // --- 1. ENVELOPE CLICK LISTENER ---
