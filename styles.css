@@ -220,6 +220,16 @@ body {
 }
 .dog-photo:active { transform: scale(0.90); cursor: grabbing; }
 
+.dog-container {
+    /* Pulls Charlie upwards by 40 pixels */
+    margin-top: -40px; 
+    
+    /* Optional: Ensure Charlie stays centered */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 /* The SVG Heart Meter */
 .heart-meter-container {
     width: 100px;
@@ -302,6 +312,25 @@ body {
     color: #556b2f; /* Darker green text */
     font-weight: bold;
     margin: 0;
+}
+
+#pickup-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Dead Center */
+    
+    width: 85%;
+    font-size: 26px;
+    font-family: 'Georgia', serif;
+    color: #d81b60;
+    text-align: center;
+    font-weight: bold;
+    
+    opacity: 0; /* Start hidden */
+    transition: opacity 1s ease;
+    z-index: 10;
+    pointer-events: none; /* Ensures it doesn't block clicks when invisible */
 }
 
 /* --- 8. KEYFRAME ANIMATIONS --- */

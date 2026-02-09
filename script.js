@@ -6,6 +6,8 @@ const line2Text = "Valentine?";
 const buttons = document.querySelector('.response-buttons');
 const noButton = document.getElementById('no-btn');
 
+const pickupText = "You're the paw-fect match for me...";
+
 // State Variables
 let isOpened = false;
 let petCount = 0;
@@ -139,8 +141,6 @@ function endGame() {
     gameScreen.style.opacity = '0';
     setTimeout(() => {
         gameScreen.style.display = 'none';
-        
-        // Show Letter
         letterContainer.style.display = 'flex'; 
         envelope.style.backgroundColor = 'transparent';
         envelope.style.boxShadow = 'none';
@@ -150,7 +150,8 @@ function endGame() {
             letterContent.style.transform = 'translateY(-10px)';
         }
         
-        startTypingSequence();
+        // [CHANGED] Run the Pickup Line instead of typing immediately
+        runPickupLineSequence(); 
     }, 500);
 }
 
@@ -265,4 +266,22 @@ function celebrate() {
 
 function resetEverything() {
     location.reload();
+}
+function runPickupLineSequence() {
+    const pickupEl = document.getElementById('pickup-line');
+    pickupEl.innerHTML = pickupText;
+    
+    // 1. Fade In
+    pickupEl.style.opacity = '1';
+    
+    // 2. Wait 3 seconds, then Fade Out
+    setTimeout(() => {
+        pickupEl.style.opacity = '0';
+        
+        // 3. Wait 1s for fade out to finish, THEN start typing the main question
+        setTimeout(() => {
+            startTypingSequence();
+        }, 1000);
+        
+    }, 3000); // Reading time (3s)
 }
