@@ -31,9 +31,8 @@ body {
     perspective: 1000px; 
 }
 .letter {
-    width: 100%;
-    max-width: 500px;
-    min-height: 380px;
+    width: 500px;
+    height: 350px;
     margin: 0 auto;
     background-color: #FFFDD0; /* Cream Envelope */
     border-radius: 8px;
@@ -58,9 +57,9 @@ body {
     left: 0;
     width: 0;
     height: 0;
-    border-left: 140px solid transparent;
-    border-right: 140px solid transparent;
-    border-top: 100px solid #EBE8C0; /* Flap Color */
+    border-left: 250px solid transparent;
+    border-right: 250px solid transparent;
+    border-top: 180px solid #EBE8C0; /* Flap Color */
     border-radius: 8px 8px 0 0;
     z-index: 10;
     
@@ -76,7 +75,7 @@ body {
 /* 3. The Heart Seal */
 .heart-seal {
     position: absolute;
-    top: 80px;
+    top: 160px;
     left: 50%;
     transform: translateX(-50%) rotate(-45deg);
     width: 30px;
@@ -161,13 +160,13 @@ body {
 
 /* Text Styling */
 .letter-header {
-    font-size: 60px;
+    font-size: 80px;
     margin-bottom: 20px;
     animation: bounce 2s ease-in-out infinite;
 }
 
 .letter-content p {
-    font-size: 24px;
+    font-size: 28px;
     color: #d81b60;
     font-weight: bold;
     margin: 10px 0;

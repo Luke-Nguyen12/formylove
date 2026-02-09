@@ -50,11 +50,24 @@ function typeWriter(text, elementId, speed, callback) {
 
 // Make the "No" button run away!
 function moveButton(btn) {
-    // Generate random X and Y positions
-    const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-    
-    btn.style.position = 'fixed'; // Break it out of the layout
+    // [FIX] If the button is still inside the letter container,
+    // move it to the main document body so it can run anywhere.
+    if (btn.parentNode !== document.body) {
+        document.body.appendChild(btn);
+        
+        // Force it to use screen coordinates
+        btn.style.position = 'fixed'; 
+        
+        // Ensure it stays on top of everything
+        btn.style.zIndex = '99999'; 
+    }
+
+    // Generate random X and Y positions within the screen
+    // We substract 100px to ensure it doesn't go too close to the edge
+    const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
+    const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
+
+    // Apply new positions
     btn.style.left = `${x}px`;
     btn.style.top = `${y}px`;
 }
