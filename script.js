@@ -56,10 +56,19 @@ envelope.addEventListener('click', () => {
 // --- 2. MUTE BUTTON ---
 if (muteBtn) {
     muteBtn.addEventListener('click', () => {
+        // We check the status of the main music track to decide the toggle
         const isMuted = !music.muted;
-        music.muted = isMuted;
+
+        // Apply that status to ALL tracks
+        if (music) music.muted = isMuted;
         if (yesAudio) yesAudio.muted = isMuted;
+        if (sadMusic) sadMusic.muted = isMuted;
+
+        // Update the button icon
         muteBtn.innerText = isMuted ? "🔇" : "🔊";
+        
+        // Optional: Change opacity to show it's "off"
+        muteBtn.style.opacity = isMuted ? "0.5" : "1";
     });
 }
 
