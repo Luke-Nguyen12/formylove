@@ -8,6 +8,7 @@ const noButton = document.getElementById('no-btn');
 const music = document.getElementById('bg-music');
 const yesAudio = document.getElementById('yes-audio'); // Added this here
 const muteBtn = document.getElementById('mute-btn');
+const sadMusic = document.getElementById('sad-music');
 
 const pickupText = "You're the paw-fect match for me...";
 
@@ -21,8 +22,8 @@ let gameWon = false;
 let game2Won = false;
 
 // Default Volume
-if (music) { music.volume = 0.5; }
-if (yesAudio) { yesAudio.volume = 0.6; }
+if (music) { music.volume = 0.25; }
+if (yesAudio) { yesAudio.volume = 0.35; }
 
 // --- 1. ENVELOPE CLICK LISTENER ---
 envelope.addEventListener('click', () => {
@@ -159,6 +160,14 @@ function endGame() {
 function startSecondGame() {
     const letterContainer = document.querySelector('.container');
     const game2Screen = document.getElementById('second-game-container');
+    
+    // Switch Music: Pause BG, Play Sad
+    if (music) music.pause();
+    if (sadMusic) {
+        sadMusic.volume = 0.25;
+        sadMusic.play();
+    }
+
     noButton.style.display = 'none';
     letterContainer.style.display = 'none';
     game2Screen.style.display = 'flex';
@@ -187,6 +196,11 @@ function petDog2() {
 function endGame2() {
     const game2Screen = document.getElementById('second-game-container');
     const letterContainer = document.querySelector('.container');
+    
+    // Switch Music back: Pause Sad, Resume BG
+    if (sadMusic) sadMusic.pause();
+    if (music) music.play();
+
     game2Screen.style.opacity = '0';
     setTimeout(() => {
         game2Screen.style.display = 'none';
