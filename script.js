@@ -289,13 +289,13 @@ function runPickupLineSequence() {
     const letterHeader = document.querySelector('.letter-header');
     
     // Set the text
-    const pickupText = "Are you a magician? Because whenever I look at you, everyone else disappears. ✨";
+    const pickupText = "You're a paw-fect match for me...";
     pickupEl.innerHTML = pickupText;
     
     // 1. Show Pickup Line (Wait 1s after letter fade starts)
     setTimeout(() => {
         pickupEl.style.opacity = '1';
-    }, 1000);
+    }, 500);
     
     // 2. Wait 4 seconds for reading, then Fade Out Pickup
     setTimeout(() => {
