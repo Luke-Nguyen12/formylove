@@ -332,7 +332,21 @@ body {
     z-index: 10;
     pointer-events: none; /* Ensures it doesn't block clicks when invisible */
 }
+/* [ADD THIS] Class to hide the heart header initially */
+.hidden-header {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
 
+/* [ADD THIS] Class for a slower fade-in (e.g., 2 seconds) */
+.slow-fade-in {
+    transition: opacity 2s ease-in-out !important; /* Force it to be slow */
+    opacity: 1 !important;
+}
+
+#second-game-container .dog-container {
+    margin-top: 0px; /* Puts Nailong back in his original spot */
+}
 /* --- 8. KEYFRAME ANIMATIONS --- */
 
 /* Float Animation for Envelope */

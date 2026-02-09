@@ -137,11 +137,22 @@ function petDog() {
 function endGame() {
     const gameScreen = document.getElementById('dog-game-container');
     const letterContainer = document.querySelector('.container');
+    const letterHeader = document.querySelector('.letter-header');
     
+    // 1. Hide the Heart Header immediately so it doesn't show up yet
+    if (letterHeader) letterHeader.classList.add('hidden-header');
+    
+    // 2. Fade out game
     gameScreen.style.opacity = '0';
+    
     setTimeout(() => {
         gameScreen.style.display = 'none';
+        
+        // 3. Prepare Letter
         letterContainer.style.display = 'flex'; 
+        // Reset opacity to 0 first so we can fade it in
+        letterContainer.style.opacity = '0'; 
+        
         envelope.style.backgroundColor = 'transparent';
         envelope.style.boxShadow = 'none';
         
@@ -150,8 +161,14 @@ function endGame() {
             letterContent.style.transform = 'translateY(-10px)';
         }
         
-        // [CHANGED] Run the Pickup Line instead of typing immediately
-        runPickupLineSequence(); 
+        // 4. Trigger the SLOW Fade In (Wait 50ms to ensure display:flex applies first)
+        setTimeout(() => {
+            letterContainer.classList.add('slow-fade-in');
+            
+            // 5. Start Pickup Line Sequence
+            runPickupLineSequence(); 
+        }, 50);
+        
     }, 500);
 }
 
@@ -269,19 +286,29 @@ function resetEverything() {
 }
 function runPickupLineSequence() {
     const pickupEl = document.getElementById('pickup-line');
+    const letterHeader = document.querySelector('.letter-header');
+    
+    // Set the text
+    const pickupText = "Are you a magician? Because whenever I look at you, everyone else disappears. ✨";
     pickupEl.innerHTML = pickupText;
     
-    // 1. Fade In
-    pickupEl.style.opacity = '1';
+    // 1. Show Pickup Line (Wait 1s after letter fade starts)
+    setTimeout(() => {
+        pickupEl.style.opacity = '1';
+    }, 1000);
     
-    // 2. Wait 3 seconds, then Fade Out
+    // 2. Wait 4 seconds for reading, then Fade Out Pickup
     setTimeout(() => {
         pickupEl.style.opacity = '0';
         
-        // 3. Wait 1s for fade out to finish, THEN start typing the main question
+        // 3. Wait 1s for fade out, THEN Reveal Heart & Start Typing
         setTimeout(() => {
+            // REVEAL THE HEART NOW!
+            if (letterHeader) letterHeader.classList.remove('hidden-header');
+            
+            // Start Typing
             startTypingSequence();
         }, 1000);
         
-    }, 3000); // Reading time (3s)
+    }, 5000); // 1s delay + 4s reading time
 }
