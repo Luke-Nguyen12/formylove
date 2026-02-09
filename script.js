@@ -227,6 +227,11 @@ function celebrate() {
 
     // 1. Determine which track is currently playing
     const currentActive = (sadMusic && !sadMusic.paused) ? sadMusic : music;
+    if (currentFadeInterval) clearInterval(currentFadeInterval);
+    
+    // Force stop everything else
+    if (music) { music.pause(); music.volume = 0; }
+    if (sadMusic) { sadMusic.pause(); sadMusic.volume = 0; }
 
     // 2. Start the quick fade out
     if (currentActive) {
@@ -311,33 +316,59 @@ function typeWriter(text, elementId, speed, callback) {
 }
 
 function resetEverything() { location.reload(); }
+let currentFadeInterval = null; // Track the active interval globally
 
-function crossfade(fromAudio, toAudio, duration = 2000) {
+function crossfade(fromAudio, toAudio, duration = 1500) {
+    // 1. Clear any existing fade so they don't fight
+    if (currentFadeInterval) clearInterval(currentFadeInterval);
+
     const steps = 20;
     const intervalTime = duration / steps;
-    // Determine target: if it's the main music, use 0.1, otherwise 0.3
     const targetVol = (toAudio === music) ? BG_MAX_VOL : OTHER_MAX_VOL;
-    const volumeStep = targetVol / steps; 
+    const volumeStep = 0.05; 
 
-    let fadeInterval = setInterval(() => {
-        if (fromAudio && fromAudio.volume > 0.01) {
-            fromAudio.volume = Math.max(0, fromAudio.volume - volumeStep);
+    // 2. Safety: If there's a third audio (like yesAudio), make sure it's paused
+    [music, sadMusic, yesAudio].forEach(track => {
+        if (track && track !== fromAudio && track !== toAudio) {
+            track.pause();
+            track.currentTime = 0;
+        }
+    });
+
+    if (toAudio) {
+        toAudio.volume = 0;
+        toAudio.play();
+    }
+
+    currentFadeInterval = setInterval(() => {
+        let fromDone = false;
+        let toDone = false;
+
+        // Fade Out
+        if (fromAudio && fromAudio.volume > 0.02) {
+            fromAudio.volume -= 0.02;
         } else if (fromAudio) {
             fromAudio.pause();
             fromAudio.volume = 0;
+            fromDone = true;
+        } else {
+            fromDone = true;
         }
 
-        if (toAudio) {
-            if (toAudio.paused) {
-                toAudio.volume = 0;
-                toAudio.play();
-            }
-            if (toAudio.volume < (targetVol - volumeStep)) {
-                toAudio.volume += volumeStep;
-            } else {
-                toAudio.volume = targetVol;
-                clearInterval(fadeInterval);
-            }
+        // Fade In
+        if (toAudio && toAudio.volume < (targetVol - 0.02)) {
+            toAudio.volume += 0.02;
+        } else if (toAudio) {
+            toAudio.volume = targetVol;
+            toDone = true;
+        } else {
+            toDone = true;
+        }
+
+        // Finish
+        if (fromDone && toDone) {
+            clearInterval(currentFadeInterval);
+            currentFadeInterval = null;
         }
     }, intervalTime);
 }
