@@ -334,14 +334,18 @@ body {
 }
 /* [ADD THIS] Class to hide the heart header initially */
 .hidden-header {
-    opacity: 0;
-    transition: opacity 1s ease;
+    opacity: 0 !important;
+    pointer-events: none;  /* Ensure it can't be clicked while invisible */
 }
 
 /* [ADD THIS] Class for a slower fade-in (e.g., 2 seconds) */
 .slow-fade-in {
     transition: opacity 2s ease-in-out !important; /* Force it to be slow */
     opacity: 1 !important;
+}
+
+#second-game-container .heart-meter-container {
+    margin-bottom: 50px; 
 }
 
 #second-game-container .dog-container {
