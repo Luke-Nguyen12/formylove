@@ -1,44 +1,85 @@
 // --- GLOBAL VARIABLES ---
 const envelope = document.querySelector('.letter');
 const letterContent = document.querySelector('.letter-content');
-// These are the strings we want to type:
 const line1Text = "Will you be my"; 
 const line2Text = "Valentine?";
 const buttons = document.querySelector('.response-buttons');
+const noButton = document.getElementById('no-btn');
 
+// State Variables
 let isOpened = false;
 let petCount = 0;
-const maxPets = 10; // Number of clicks required to win
+let petCount2 = 0; // For Game 2
+const maxPets = 10; 
 let gameWon = false;
+let game2Won = false;
+
+// No Button Logic Variables
+let noClickCount = 0; // Tracks how many times it moved
+const maxMoves = 3;   // Moves 3 times, then stops
 
 // --- 1. ENVELOPE CLICK LISTENER ---
 envelope.addEventListener('click', () => {
     if (!envelope.classList.contains('opened')) {
         envelope.classList.add('opened');
-        
-        // Wait 1.5s for envelope to open, THEN start game
-        setTimeout(() => {
-            startGame(); 
-        }, 1500);
+        setTimeout(() => { startGame(); }, 1500);
     }
 });
 
-// --- 2. START DOG GAME ---
+// --- 2. NO BUTTON LOGIC (The Prank) ---
+// First Interaction: CLICK causes the first jump
+noButton.addEventListener('click', (e) => {
+    if (noClickCount === 0) {
+        e.preventDefault(); // Stop click from doing anything
+        moveNoButton();
+        noClickCount++;
+        
+        // After first click, enable HOVER to run away
+        noButton.addEventListener('mouseover', hoverHandler);
+    } else if (noClickCount >= maxMoves) {
+        // If it moved 3 times, this click triggers Game 2
+        startSecondGame();
+    }
+});
+
+// Subsequent Interactions: HOVER causes jumps
+function hoverHandler() {
+    if (noClickCount < maxMoves) {
+        moveNoButton();
+        noClickCount++;
+    } else {
+        // Stop moving after 3 jumps!
+        // We remove the listener so the user can finally click it
+        noButton.removeEventListener('mouseover', hoverHandler);
+        noButton.style.cursor = "pointer"; // Show them it's clickable
+    }
+}
+
+function moveNoButton() {
+    // Move to body to escape container
+    if (noButton.parentNode !== document.body) {
+        document.body.appendChild(noButton);
+        noButton.style.position = 'fixed'; 
+        noButton.style.zIndex = '99999'; 
+    }
+
+    const x = Math.random() * (window.innerWidth - noButton.offsetWidth - 50);
+    const y = Math.random() * (window.innerHeight - noButton.offsetHeight - 50);
+
+    noButton.style.left = `${x}px`;
+    noButton.style.top = `${y}px`;
+}
+
+// --- 3. GAME 1 (The First Dog) ---
 function startGame() {
     const gameScreen = document.getElementById('dog-game-container');
     const letterContainer = document.querySelector('.container');
     
-    // Hide envelope
     letterContainer.style.display = 'none';
-
-    // Show Game
     gameScreen.style.display = 'flex';
-    setTimeout(() => {
-        gameScreen.style.opacity = '1';
-    }, 50);
+    setTimeout(() => { gameScreen.style.opacity = '1'; }, 50);
 }
 
-// --- 3. PET THE DOG LOGIC ---
 function petDog() {
     if (gameWon) return; 
 
@@ -46,68 +87,117 @@ function petDog() {
     const pinkStop = document.getElementById('fill-stop');
     const greyStop = document.getElementById('empty-stop');
     
-    // Smush Effect
+    // Smush
     dog.style.transform = "scale(0.9)";
     setTimeout(() => { dog.style.transform = "scale(1)"; }, 100);
 
-    // Increment Counter
+    // Math
     petCount++;
-
-    // [FIXED] You were missing this math line!
     const percentage = (petCount / maxPets) * 100;
 
-    // Update the SVG Gradient Offsets
     if (pinkStop && greyStop) {
         pinkStop.setAttribute('offset', `${percentage}%`);
         greyStop.setAttribute('offset', `${percentage}%`);
     }
     
-    // Check for Win
     if (petCount >= maxPets) {
         gameWon = true;
         setTimeout(endGame, 500); 
     }
 }
 
-// --- 4. END GAME & START TYPING ---
 function endGame() {
     const gameScreen = document.getElementById('dog-game-container');
     const letterContainer = document.querySelector('.container');
     
-    // Fade out game
     gameScreen.style.opacity = '0';
-    
     setTimeout(() => {
         gameScreen.style.display = 'none';
         
-        // Bring back the letter container
+        // Show Letter
         letterContainer.style.display = 'flex'; 
-        
-        // Make envelope transparent so we just see text
         envelope.style.backgroundColor = 'transparent';
         envelope.style.boxShadow = 'none';
         
-        // Ensure content is visible
         if(letterContent) {
             letterContent.style.opacity = '1';
             letterContent.style.transform = 'translateY(-10px)';
         }
         
-        // Start typing
         startTypingSequence();
     }, 500);
 }
 
-// --- 5. TYPING SEQUENCE ---
-function startTypingSequence() {
-    // Hide buttons initially
-    buttons.style.display = 'none';
+// --- 4. GAME 2 (The Second Dog Screen) ---
+function startSecondGame() {
+    const letterContainer = document.querySelector('.container');
+    const game2Screen = document.getElementById('second-game-container');
+    
+    // Hide the No Button if it's floating on the body
+    noButton.style.display = 'none';
 
+    // Hide Letter
+    letterContainer.style.display = 'none';
+    
+    // Show Game 2
+    game2Screen.style.display = 'flex';
+    setTimeout(() => { game2Screen.style.opacity = '1'; }, 50);
+}
+
+function petDog2() {
+    if (game2Won) return; 
+
+    const dog = document.getElementById('dog-photo-2');
+    const pinkStop = document.getElementById('fill-stop-2');
+    const greyStop = document.getElementById('empty-stop-2');
+    
+    // Smush
+    dog.style.transform = "scale(0.9)";
+    setTimeout(() => { dog.style.transform = "scale(1)"; }, 100);
+
+    // Math
+    petCount2++;
+    const percentage = (petCount2 / maxPets) * 100;
+
+    if (pinkStop && greyStop) {
+        pinkStop.setAttribute('offset', `${percentage}%`);
+        greyStop.setAttribute('offset', `${percentage}%`);
+    }
+    
+    if (petCount2 >= maxPets) {
+        game2Won = true;
+        setTimeout(endGame2, 500); 
+    }
+}
+
+function endGame2() {
+    const game2Screen = document.getElementById('second-game-container');
+    const letterContainer = document.querySelector('.container');
+    
+    game2Screen.style.opacity = '0';
+    setTimeout(() => {
+        game2Screen.style.display = 'none';
+        
+        // Show Letter AGAIN
+        letterContainer.style.display = 'flex'; 
+        
+        // Ensure buttons are visible immediately since text is typed
+        buttons.style.display = 'flex';
+        
+        // BUT... Remove the No Button forever!
+        // (If it's attached to body or container, remove it)
+        if(noButton) noButton.remove(); 
+        
+    }, 500);
+}
+
+
+// --- 5. TYPING & CELEBRATION ---
+function startTypingSequence() {
+    buttons.style.display = 'none';
     typeWriter(line1Text, 'line1', 100, () => {
         typeWriter(line2Text, 'line2', 150, () => {
-            setTimeout(() => {
-                buttons.style.display = 'flex';
-            }, 500);
+            setTimeout(() => { buttons.style.display = 'flex'; }, 500);
         });
     });
 }
@@ -115,9 +205,8 @@ function startTypingSequence() {
 function typeWriter(text, elementId, speed, callback) {
     let i = 0;
     const element = document.getElementById(elementId);
-    
-    // Safety check
     if (!element) return;
+    element.innerHTML = ""; // Clear previous text if any
     
     function type() {
         if (i < text.length) {
@@ -131,27 +220,11 @@ function typeWriter(text, elementId, speed, callback) {
     type();
 }
 
-/* --- FUN FUNCTIONS --- */
-
-function moveButton(btn) {
-    if (btn.parentNode !== document.body) {
-        document.body.appendChild(btn);
-        btn.style.position = 'fixed'; 
-        btn.style.zIndex = '99999'; 
-    }
-
-    const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
-    const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
-
-    btn.style.left = `${x}px`;
-    btn.style.top = `${y}px`;
-}
-
 function celebrate() {
     const letterContainer = document.querySelector('.container');
     const celebrationScreen = document.getElementById('celebration');
-    const noButton = document.querySelector('.btn-no');
-
+    
+    // Just in case noButton exists
     if (noButton) noButton.style.display = 'none';
     
     letterContainer.style.transition = "opacity 1s ease";
@@ -160,15 +233,10 @@ function celebrate() {
     setTimeout(() => {
         letterContainer.style.display = "none"; 
         celebrationScreen.style.display = "flex"; 
-        setTimeout(() => {
-            celebrationScreen.style.opacity = "1";
-        }, 50);
+        setTimeout(() => { celebrationScreen.style.opacity = "1"; }, 50);
     }, 1000);
 }
 
-// --- RESET FUNCTION ---
 function resetEverything() {
-    // The cleanest way to reset animations, text, and moved buttons
-    // is to simply reload the page!
     location.reload();
 }
