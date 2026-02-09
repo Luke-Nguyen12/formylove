@@ -289,7 +289,7 @@ function runPickupLineSequence() {
     const letterHeader = document.querySelector('.letter-header');
     
     // Set the text
-    const pickupText = "You're a paw-fect match for me...";
+    const pickupText = "You're the paw-fect match for me...";
     pickupEl.innerHTML = pickupText;
     
     // 1. Show Pickup Line (Wait 1s after letter fade starts)
