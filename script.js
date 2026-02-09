@@ -5,6 +5,8 @@ const line1Text = "Will you be my";
 const line2Text = "Valentine?";
 const buttons = document.querySelector('.response-buttons');
 const noButton = document.getElementById('no-btn');
+const music = document.getElementById('bg-music');
+const muteBtn = document.getElementById('mute-btn');
 
 const pickupText = "You're the paw-fect match for me...";
 
@@ -20,13 +22,16 @@ let game2Won = false;
 let noClickCount = 0; // Tracks how many times it moved
 const maxMoves = 6;   // Moves 3 times, then stops
 
+if (music) {
+    music.volume = 0.5;
+}
+
 // --- 1. ENVELOPE CLICK LISTENER ---
 envelope.addEventListener('click', () => {
     if (!envelope.classList.contains('opened')) {
         envelope.classList.add('opened');
 
         // --- MUSIC LOGIC STARTS HERE ---
-        const music = document.getElementById('bg-music');
         if (music) {
             music.volume = 0;
             music.play();
@@ -332,17 +337,13 @@ function runPickupLineSequence() {
         
     }, 3000); // 1s delay + 4s reading time
 }
-const muteBtn = document.getElementById('mute-btn');
-const music = document.getElementById('bg-music');
 
 muteBtn.addEventListener('click', () => {
     if (music.muted) {
         music.muted = false;
         muteBtn.innerText = "🔊";
-        muteBtn.style.opacity = "1";
     } else {
         music.muted = true;
         muteBtn.innerText = "🔇";
-        muteBtn.style.opacity = "0.6"; // Dims it slightly when muted
     }
 });
