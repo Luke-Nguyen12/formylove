@@ -24,7 +24,27 @@ const maxMoves = 6;   // Moves 3 times, then stops
 envelope.addEventListener('click', () => {
     if (!envelope.classList.contains('opened')) {
         envelope.classList.add('opened');
-        setTimeout(() => { startGame(); }, 1500);
+
+        // --- MUSIC LOGIC STARTS HERE ---
+        const music = document.getElementById('bg-music');
+        if (music) {
+            music.volume = 0;
+            music.play();
+
+            let fadeAudio = setInterval(() => {
+                if (music.volume < 0.9) {
+                    music.volume += 0.1;
+                } else {
+                    music.volume = 1;
+                    clearInterval(fadeAudio);
+                }
+            }, 200);
+        }
+        // --- MUSIC LOGIC ENDS HERE ---
+
+        setTimeout(() => { 
+            startGame(); 
+        }, 1500);
     }
 });
 
@@ -312,3 +332,17 @@ function runPickupLineSequence() {
         
     }, 3000); // 1s delay + 4s reading time
 }
+const muteBtn = document.getElementById('mute-btn');
+const music = document.getElementById('bg-music');
+
+muteBtn.addEventListener('click', () => {
+    if (music.muted) {
+        music.muted = false;
+        muteBtn.innerText = "🔊";
+        muteBtn.style.opacity = "1";
+    } else {
+        music.muted = true;
+        muteBtn.innerText = "🔇";
+        muteBtn.style.opacity = "0.6"; // Dims it slightly when muted
+    }
+});

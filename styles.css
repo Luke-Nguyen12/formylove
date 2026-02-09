@@ -352,7 +352,28 @@ body {
     margin-top: 0px; /* Puts Nailong back in his original spot */
 }
 /* --- 8. KEYFRAME ANIMATIONS --- */
+.mute-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #FFFDD0; /* Cream/Ivory */
+    border: 2px solid #ff69b4;  /* Hot Pink */
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 1000; /* Keeps it above everything else */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
 
+.mute-control:hover {
+    transform: scale(1.1);
+}
 /* Float Animation for Envelope */
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
