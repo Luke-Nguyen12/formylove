@@ -9,6 +9,8 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Georgia', serif;
+
+    background-color: #87ae73;
 }
 
 .background {
@@ -291,12 +293,18 @@ body {
 
 /* The Dog Photo Styling */
 .dog-photo {
-    width: 250px;
-    height: 250px;
-    object-fit: cover;
+    /* Adjust max-width to make the dog bigger or smaller */
+    max-width: 300px; 
+    width: 100%; /* Ensures it doesn't overflow on small phones */
+    height: auto; /* Keeps the natural shape of the dog photo */
+    
+    /* REMOVED borders, shadows, and radius so it blends in */
+    
     cursor: grab; /* The "Hand" Cursor */
-    transition: transform 0.1s ease; /* Fast bounce back */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.1s ease; /* Fast bounce back for petting */
+    
+    /* Optional: A very subtle drop shadow to make it pop just a little */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); */
 }
 
 /* The "Smush" Effect Class */

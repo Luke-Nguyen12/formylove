@@ -144,6 +144,7 @@ function celebrate() {
     // 1. Select elements
     const letterContainer = document.querySelector('.container');
     const celebrationScreen = document.getElementById('celebration');
+    const noButton = document.querySelector('.btn-no');
     if (noButton) {
         noButton.style.display = 'none';
     }
