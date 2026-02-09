@@ -79,7 +79,7 @@ body {
     position: absolute;
     top: 160px;
     left: 50%;
-    transform: translateX(-50%) rotate(-45deg);
+    transform: translateX(-50%);
     width: 30px;
     height: 30px;
     background-color: #FF69B4;
@@ -133,7 +133,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #fffbf7; /* [CHANGED] Slightly lighter paper color to stand out */
+   background-color: transparent;
+
     opacity: 0; 
     z-index: 5;
     
@@ -317,13 +318,18 @@ body {
 
 /* --- THE HEART METER --- */
 .heart-meter-container {
-    position: relative;
-    width: 100px;  /* Big enough to hold the rotated heart */
+    width: 100px;
     height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    
+    /* Optional: Make it pulse slightly */
+    animation: heartbeat 1.5s infinite;
+}
+.svg-heart {
+    width: 100%;
+    height: 100%;
+    /* Add a drop shadow for depth */
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
 }
 
 /* The Wrapper that controls the "Fill" level */
@@ -399,6 +405,7 @@ body {
     transform: rotate(-45deg);    /* The tilt */
     margin: var(--h-margin, 0);   /* Spacing helper */
     box-shadow: -2px 2px 5px rgba(0,0,0,0.2); /* Soft shadow */
+    z-index: 20;
 }
 
 /* The Circles (Top and Right lobes) */

@@ -43,7 +43,9 @@ function petDog() {
     if (gameWon) return; // Stop if already won
 
     const dog = document.getElementById('dog-photo');
-    const heartWrapper = document.getElementById('heart-fill-wrapper');
+
+    const pinkStop = document.getElementById('fill-stop');
+    const greyStop = document.getElementById('empty-stop');
     
     // Add Smush Effect (Visual only, CSS :active handles most of it)
     dog.style.transform = "scale(0.9)";
@@ -51,11 +53,11 @@ function petDog() {
 
     // Increment Counter
     petCount++;
-    
-    // Calculate Percentage (e.g., 5 pets / 10 max = 50%)
-    const percentage = (petCount / maxPets) * 100;
-    heartWrapper.style.height = `${percentage}%`;
 
+    // [CHANGED] Update the SVG Gradient Offsets
+    pinkStop.setAttribute('offset', `${percentage}%`);
+    greyStop.setAttribute('offset', `${percentage}%`);
+    
     // Check for Win
     if (petCount >= maxPets) {
         gameWon = true;
