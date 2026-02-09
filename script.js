@@ -161,12 +161,8 @@ function startSecondGame() {
     const letterContainer = document.querySelector('.container');
     const game2Screen = document.getElementById('second-game-container');
     
-    // Switch Music: Pause BG, Play Sad
-    if (music) music.pause();
-    if (sadMusic) {
-        sadMusic.volume = 0.25;
-        sadMusic.play();
-    }
+    // Smoothly swap BG music for Sad music over 1.5 seconds
+    crossfade(music, sadMusic, 1500);
 
     noButton.style.display = 'none';
     letterContainer.style.display = 'none';
@@ -197,9 +193,8 @@ function endGame2() {
     const game2Screen = document.getElementById('second-game-container');
     const letterContainer = document.querySelector('.container');
     
-    // Switch Music back: Pause Sad, Resume BG
-    if (sadMusic) sadMusic.pause();
-    if (music) music.play();
+    // Smoothly swap Sad music back to BG music
+    crossfade(sadMusic, music, 1500);
 
     game2Screen.style.opacity = '0';
     setTimeout(() => {
@@ -215,19 +210,20 @@ function celebrate() {
     const letterContainer = document.querySelector('.container');
     const celebrationScreen = document.getElementById('celebration');
 
-    if (music) {
-        let fadeOut = setInterval(() => {
-            if (music.volume > 0.05) {
-                music.volume -= 0.05;
+    const currentActive = (sadMusic && !sadMusic.paused) ? sadMusic : music;
+
+    if (currentActive) {
+        let quickFade = setInterval(() => {
+            if (currentActive.volume > 0.1) {
+                currentActive.volume -= 0.1;
             } else {
-                music.pause();
-                clearInterval(fadeOut);
+                currentActive.pause();
+                clearInterval(quickFade);
+                if (yesAudio) yesAudio.play(); // Start the celebration!
             }
         }, 50);
-    }
-
-    if (yesAudio) {
-        yesAudio.play();
+    } else {
+        if (yesAudio) yesAudio.play();
     }
     
     if (noButton) noButton.style.display = 'none';
@@ -282,3 +278,38 @@ function typeWriter(text, elementId, speed, callback) {
 }
 
 function resetEverything() { location.reload(); }
+
+function crossfade(fromAudio, toAudio, duration = 2000) {
+    const steps = 20;
+    const intervalTime = duration / steps;
+    const volumeStep = 0.05; // Adjusting by 5% each step
+
+    let fadeInterval = setInterval(() => {
+        // Lower the "from" audio
+        if (fromAudio && fromAudio.volume > 0.05) {
+            fromAudio.volume -= volumeStep;
+        } else if (fromAudio) {
+            fromAudio.pause();
+            fromAudio.volume = 0;
+        }
+
+        // Raise the "to" audio
+        if (toAudio) {
+            if (toAudio.paused) {
+                toAudio.volume = 0;
+                toAudio.play();
+            }
+            if (toAudio.volume < 0.45) {
+                toAudio.volume += volumeStep;
+            } else {
+                toAudio.volume = 0.5;
+                clearInterval(fadeInterval); // Transition complete
+            }
+        }
+        
+        // If 'from' is done and 'to' is at target, stop
+        if ((!fromAudio || fromAudio.paused) && (!toAudio || toAudio.volume >= 0.5)) {
+            clearInterval(fadeInterval);
+        }
+    }, intervalTime);
+}
