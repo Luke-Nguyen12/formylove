@@ -34,10 +34,10 @@ envelope.addEventListener('click', () => {
             music.volume = 0;
             music.play();
             let fadeAudio = setInterval(() => {
-                if (music.volume < 0.45) { // Fading to 50%
-                    music.volume += 0.05;
+                if (music.volume < 0.1) { // Fading to 50%
+                    music.volume += 0.01;
                 } else {
-                    music.volume = 0.5;
+                    music.volume = 0.1;
                     clearInterval(fadeAudio);
                 }
             }, 200);
@@ -282,7 +282,7 @@ function resetEverything() { location.reload(); }
 function crossfade(fromAudio, toAudio, duration = 2000) {
     const steps = 20;
     const intervalTime = duration / steps;
-    const volumeStep = 0.05; // Adjusting by 5% each step
+    const volumeStep = 0.025; // Adjusting by 5% each step
 
     let fadeInterval = setInterval(() => {
         // Lower the "from" audio
@@ -299,16 +299,16 @@ function crossfade(fromAudio, toAudio, duration = 2000) {
                 toAudio.volume = 0;
                 toAudio.play();
             }
-            if (toAudio.volume < 0.45) {
+            if (toAudio.volume < 0.3) {
                 toAudio.volume += volumeStep;
             } else {
-                toAudio.volume = 0.5;
+                toAudio.volume = 0.3;
                 clearInterval(fadeInterval); // Transition complete
             }
         }
         
         // If 'from' is done and 'to' is at target, stop
-        if ((!fromAudio || fromAudio.paused) && (!toAudio || toAudio.volume >= 0.5)) {
+        if ((!fromAudio || fromAudio.paused) && (!toAudio || toAudio.volume >= 0.3)) {
             clearInterval(fadeInterval);
         }
     }, intervalTime);
