@@ -16,7 +16,7 @@ let game2Won = false;
 
 // No Button Logic Variables
 let noClickCount = 0; // Tracks how many times it moved
-const maxMoves = 3;   // Moves 3 times, then stops
+const maxMoves = 6;   // Moves 3 times, then stops
 
 // --- 1. ENVELOPE CLICK LISTENER ---
 envelope.addEventListener('click', () => {

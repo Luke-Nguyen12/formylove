@@ -224,7 +224,7 @@ body {
 .heart-meter-container {
     width: 100px;
     height: 100px;
-    margin: 0 auto 50px auto;
+    margin: 0 auto 10px auto;
     
     /* [CHANGED] Use 'pulse-upright' so it doesn't spin sideways! */
     animation: pulse-upright 1.5s infinite;
