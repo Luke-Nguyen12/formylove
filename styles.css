@@ -108,9 +108,10 @@ body {
 /* Step 1: Heart disappears */
 .letter.opened .heart-seal {
     opacity: 0;
+    transition: opacity 0.1s ease, transform 0.4s ease;
     transform: translateX(-50%) rotate(-45deg) scale(0.5);
     /* [CHANGED] reduced transition time to 0.1s for instant disappearance */
-    transition: opacity 0.1s ease, transform 0.4s ease;
+
 }
 
 /* Step 2: Flap Flips Up & Fades Out */
@@ -303,8 +304,9 @@ body {
     cursor: grab; /* The "Hand" Cursor */
     transition: transform 0.1s ease; /* Fast bounce back for petting */
     
-    /* Optional: A very subtle drop shadow to make it pop just a little */
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); 
+
+    animation: dogPopOut 0.8s ease-out forwards;
 }
 
 /* The "Smush" Effect Class */
@@ -316,13 +318,29 @@ body {
 /* --- THE HEART METER --- */
 .heart-meter-container {
     position: relative;
-    font-size: 60px; /* Size of the heart */
-    margin-bottom: 30px;
-    width: 70px;
-    height: 70px;
+    width: 100px;  /* Big enough to hold the rotated heart */
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 30px;
+}
+
+/* The Wrapper that controls the "Fill" level */
+#heart-fill-wrapper {
+    position: absolute;
+    bottom: 15px; /* Adjust this to align with the bottom of the gray heart */
+    left: 0;
+    width: 100%;
+    height: 0%; /* Starts empty (0%) */
+    overflow: hidden; /* This cuts off the top of the pink heart! */
+    z-index: 2;
+    transition: height 0.2s ease;
+    
+    /* Flexbox to keep the inner heart anchored at the bottom */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; 
 }
 
 .heart-bg {
@@ -371,6 +389,66 @@ body {
     background: #FFFDD0;
     color: #87ae73;
     transform: scale(1.1);
+}
+
+.css-heart {
+    position: relative;
+    width: var(--h-size, 30px);   /* Default 30px, changeable */
+    height: var(--h-size, 30px);
+    background-color: #FF69B4;    /* Hot Pink */
+    transform: rotate(-45deg);    /* The tilt */
+    margin: var(--h-margin, 0);   /* Spacing helper */
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.2); /* Soft shadow */
+}
+
+/* The Circles (Top and Right lobes) */
+.css-heart::before,
+.css-heart::after {
+    content: "";
+    position: absolute;
+    width: var(--h-size, 30px);
+    height: var(--h-size, 30px);
+    background-color: inherit; /* Matches the heart color */
+    border-radius: 50%;
+}
+
+.css-heart::before {
+    top: -50%; /* Move up */
+    left: 0;
+}
+
+.css-heart::after {
+    left: 50%; /* Move right */
+    top: 0;
+}
+
+/* --- ANIMATIONS --- */
+/* Pulse Animation for the Letter Header */
+@keyframes heartbeat {
+    0% { transform: rotate(-45deg) scale(1); }
+    15% { transform: rotate(-45deg) scale(1.1); }
+    30% { transform: rotate(-45deg) scale(1); }
+    45% { transform: rotate(-45deg) scale(1.1); }
+    60% { transform: rotate(-45deg) scale(1); }
+    100% { transform: rotate(-45deg) scale(1); }
+}
+
+.beating {
+    animation: heartbeat 1.2s infinite;
+}
+@keyframes dogPopOut {
+    0% {
+        opacity: 0;
+        transform: translateY(100px) scale(0.5); /* Start low and small */
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1.1); /* Jump a little too high! */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1); /* Land in correct spot */
+    }
 }
 /* Animations */
 @keyframes slideUp {

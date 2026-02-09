@@ -13,7 +13,9 @@
         <div class="heart-seal"></div>
         
         <div class="letter-content">
-            <h1 class="letter-header">❤️</h1>
+            <div class="letter-header" style="display: flex; justify-content: center; margin-bottom: 50px;">
+            <div class="css-heart beating" style="--h-size: 50px; background-color: #d81b60;"></div>
+            </div>
             <p id="line1"></p> 
             <p id="line2"></p>
             <div class="response-buttons" style="display: none;">
@@ -27,10 +29,11 @@
     <h2 class="game-instruction">Pet Charlie to fill the heart!</h2>
     
     <div class="heart-meter-container">
-        <div class="heart-bg">❤️</div>
-        <div id="heart-fill-wrapper" class="heart-fill-wrapper">
-            <div class="heart-fill">❤️</div>
-        </div>
+    <div class="css-heart" style="--h-size: 60px; background-color: #ccc; box-shadow: none;"></div>
+
+    <div id="heart-fill-wrapper">
+        <div class="css-heart" style="--h-size: 60px; background-color: #FF69B4;"></div>
+    </div>
     </div>
 
     <div class="dog-container">

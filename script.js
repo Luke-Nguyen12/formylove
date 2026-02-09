@@ -18,7 +18,7 @@ envelope.addEventListener('click', () => {
         // Wait 1.5s for envelope to open/fade, THEN start game
         setTimeout(() => {
             startGame(); 
-        }, 750);
+        }, 1500);
     }
 });
 
