@@ -106,7 +106,9 @@ body {
 /* Step 1: Heart disappears */
 .letter.opened .heart-seal {
     opacity: 0;
-    transform: translateX(-50%) rotate(-45deg) scale(0.5); /* Shrink effect */
+    transform: translateX(-50%) rotate(-45deg) scale(0.5);
+    /* [CHANGED] reduced transition time to 0.1s for instant disappearance */
+    transition: opacity 0.1s ease, transform 0.4s ease;
 }
 
 /* Step 2: Flap Flips Up & Fades Out */
@@ -292,8 +294,6 @@ body {
     width: 250px;
     height: 250px;
     object-fit: cover;
-    border-radius: 50%; /* Circle shape */
-    border: 5px solid #FFFDD0;
     cursor: grab; /* The "Hand" Cursor */
     transition: transform 0.1s ease; /* Fast bounce back */
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
@@ -343,6 +343,26 @@ body {
     height: 70px; 
     display: flex;
     align-items: center;
+}
+.btn-replay {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #FFFDD0;
+    color: #FFFDD0;
+    border-radius: 20px;
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards; /* Delays appearance by 2s so it doesn't distract */
+    transition: all 0.3s ease;
+}
+
+.btn-replay:hover {
+    background: #FFFDD0;
+    color: #87ae73;
+    transform: scale(1.1);
 }
 /* Animations */
 @keyframes slideUp {

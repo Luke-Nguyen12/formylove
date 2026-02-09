@@ -1,4 +1,5 @@
 const envelope = document.querySelector('.letter');
+const letterContent = document.querySelector('.letter-content');
 const line1 = "Will you be my";
 const line2 = "Valentine?";
 const buttons = document.querySelector('.response-buttons');
@@ -17,7 +18,7 @@ envelope.addEventListener('click', () => {
         // Wait 1.5s for envelope to open/fade, THEN start game
         setTimeout(() => {
             startGame(); 
-        }, 1500);
+        }, 750);
     }
 });
 
@@ -75,6 +76,8 @@ function endGame() {
         
         // Bring back the letter container (but transparent background)
         letterContainer.style.display = 'flex'; 
+        envelope.style.backgroundColor = 'transparent';
+        envelope.style.boxShadow = 'none';
         
         // NOW we start the typewriter effect!
         // (Paste your original TypeWriter sequence here)
@@ -160,3 +163,57 @@ function celebrate() {
         }, 50);
     }, 1000);
 }
+function resetEverything() {
+    // 1. Get all elements
+    const letterContainer = document.querySelector('.container');
+    const envelope = document.querySelector('.letter');
+    const celebrationScreen = document.getElementById('celebration');
+    const gameScreen = document.getElementById('dog-game-container');
+    const heartFill = document.getElementById('heart-fill-wrapper');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const buttons = document.querySelector('.response-buttons');
+    const noButton = document.querySelector('.btn-no');
+
+    // 2. Reset Variables
+    isOpened = false;
+    petCount = 0;
+    gameWon = false;
+
+    // 3. Hide Celebration Screen
+    celebrationScreen.style.opacity = '0';
+    setTimeout(() => {
+        celebrationScreen.style.display = 'none';
+
+        // 4. Reset Envelope State
+        letterContainer.style.display = 'flex';
+        letterContainer.style.opacity = '1';
+        envelope.classList.remove('opened');
+        
+        // Reset Envelope Styles (that were changed by transitions)
+        envelope.style.backgroundColor = ''; 
+        envelope.style.boxShadow = '';
+
+        // 5. Reset Dog Game
+        gameScreen.style.display = 'none';
+        gameScreen.style.opacity = '0';
+        heartFill.style.height = '0%'; // Empty heart
+
+        // 6. Reset Text (Clear the typewriter text)
+        line1.innerHTML = '';
+        line2.innerHTML = '';
+        
+        // 7. Reset Buttons
+        buttons.style.display = 'none';
+        
+        // Bring the "No" button back if it ran away
+        if (noButton) {
+            noButton.style.position = ''; // Clear fixed position
+            noButton.style.left = '';
+            noButton.style.top = '';
+            document.querySelector('.response-buttons').appendChild(noButton); // Put it back in container
+            noButton.style.display = ''; // Make visible again
+        }
+
+    }, 500);
+} 
