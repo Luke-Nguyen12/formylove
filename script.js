@@ -177,7 +177,7 @@ function startSecondGame() {
     const game2Screen = document.getElementById('second-game-container');
     
     // Smoothly swap BG music for Sad music over 1.5 seconds
-    crossfade(music, sadMusic, 1500);
+    crossfade(music, sadMusic, 500);
 
     noButton.style.display = 'none';
     letterContainer.style.display = 'none';
@@ -209,7 +209,7 @@ function endGame2() {
     const letterContainer = document.querySelector('.container');
     
     // Smoothly swap Sad music back to BG music
-    crossfade(sadMusic, music, 1500);
+    crossfade(sadMusic, music, 500);
 
     game2Screen.style.opacity = '0';
     setTimeout(() => {
