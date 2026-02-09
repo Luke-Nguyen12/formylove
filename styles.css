@@ -70,8 +70,8 @@ body {
     height: 100%;
     
     /* Transparent so we see the Sage Green background */
-    background-color: transparent; 
-    box-shadow: none;
+    background-color: #fffbf7; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 
     opacity: 0; 
     z-index: 5;
@@ -84,12 +84,6 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-}
-
-/* Slide up slightly when revealed */
-.letter.opened .letter-content {
-    opacity: 1;
-    transform: translateY(-10px);
 }
 
 .letter-content p {
@@ -204,8 +198,10 @@ body {
 .game-instruction {
     color: #FFFDD0;
     font-family: 'Georgia', serif;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 40px;
+    font-size: 36px;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 /* The Dog Photo */
@@ -224,7 +220,7 @@ body {
 .heart-meter-container {
     width: 100px;
     height: 100px;
-    margin-bottom: 20px;
+    margin: 0 auto 50px auto;
     
     /* [CHANGED] Use 'pulse-upright' so it doesn't spin sideways! */
     animation: pulse-upright 1.5s infinite;
