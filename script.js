@@ -10,6 +10,9 @@ const yesAudio = document.getElementById('yes-audio'); // Added this here
 const muteBtn = document.getElementById('mute-btn');
 const sadMusic = document.getElementById('sad-music');
 
+const BG_MAX_VOL = 0.1;
+const OTHER_MAX_VOL = 0.3;
+
 const pickupText = "You're the paw-fect match for me...";
 
 // State Variables
@@ -22,8 +25,9 @@ let gameWon = false;
 let game2Won = false;
 
 // Default Volume
-if (music) { music.volume = 0.1; }
-if (yesAudio) { yesAudio.volume = 0.35; }
+if (music) music.volume = BG_MAX_VOL;
+if (yesAudio) yesAudio.volume = OTHER_MAX_VOL;
+if (sadMusic) sadMusic.volume = OTHER_MAX_VOL;
 
 // --- 1. ENVELOPE CLICK LISTENER ---
 envelope.addEventListener('click', () => {
@@ -31,13 +35,15 @@ envelope.addEventListener('click', () => {
         envelope.classList.add('opened');
 
         if (music) {
-            music.volume = 0;
-            music.play();
+            music.volume = 0; // 1. Start at absolute silence
+            music.play();    // 2. Actually start the file playing
+
+            // 3. Begin the fade up
             let fadeAudio = setInterval(() => {
-                if (music.volume < 0.1) { // Fading to 50%
+                if (music.volume < (BG_MAX_VOL - 0.01)) { 
                     music.volume += 0.01;
                 } else {
-                    music.volume = 0.1;
+                    music.volume = BG_MAX_VOL;
                     clearInterval(fadeAudio);
                 }
             }, 200);
@@ -210,30 +216,48 @@ function celebrate() {
     const letterContainer = document.querySelector('.container');
     const celebrationScreen = document.getElementById('celebration');
 
+    // 1. Determine which track is currently playing
     const currentActive = (sadMusic && !sadMusic.paused) ? sadMusic : music;
 
+    // 2. Start the quick fade out
     if (currentActive) {
         let quickFade = setInterval(() => {
-            if (currentActive.volume > 0.1) {
-                currentActive.volume -= 0.1;
+            if (currentActive.volume > 0.05) {
+                currentActive.volume -= 0.05; // Dropping volume quickly
             } else {
                 currentActive.pause();
-                clearInterval(quickFade);
-                if (yesAudio) yesAudio.play(); // Start the celebration!
+                currentActive.volume = 0;
+                clearInterval(quickFade); // Stop the loop
+
+                // 3. Start the celebration song!
+                if (yesAudio) {
+                    yesAudio.volume = 0.35; // Your target for Yes audio
+                    yesAudio.play();
+                }
             }
         }, 50);
     } else {
-        if (yesAudio) yesAudio.play();
+        // Fallback if no music was playing
+        if (yesAudio) {
+            yesAudio.volume = 0.35;
+            yesAudio.play();
+        }
     }
     
+    // 4. Visual Transitions
     if (noButton) noButton.style.display = 'none';
-    letterContainer.style.transition = "opacity 1s ease";
-    letterContainer.style.opacity = "0";
+    
+    if (letterContainer) {
+        letterContainer.style.transition = "opacity 1s ease";
+        letterContainer.style.opacity = "0";
+    }
     
     setTimeout(() => {
-        letterContainer.style.display = "none"; 
-        celebrationScreen.style.display = "flex"; 
-        setTimeout(() => { celebrationScreen.style.opacity = "1"; }, 50);
+        if (letterContainer) letterContainer.style.display = "none"; 
+        if (celebrationScreen) {
+            celebrationScreen.style.display = "flex"; 
+            setTimeout(() => { celebrationScreen.style.opacity = "1"; }, 50);
+        }
     }, 1000);
 }
 
@@ -282,34 +306,29 @@ function resetEverything() { location.reload(); }
 function crossfade(fromAudio, toAudio, duration = 2000) {
     const steps = 20;
     const intervalTime = duration / steps;
-    const volumeStep = 0.025; // Adjusting by 5% each step
+    // Determine target: if it's the main music, use 0.1, otherwise 0.3
+    const targetVol = (toAudio === music) ? BG_MAX_VOL : OTHER_MAX_VOL;
+    const volumeStep = targetVol / steps; 
 
     let fadeInterval = setInterval(() => {
-        // Lower the "from" audio
-        if (fromAudio && fromAudio.volume > 0.05) {
-            fromAudio.volume -= volumeStep;
+        if (fromAudio && fromAudio.volume > 0.01) {
+            fromAudio.volume = Math.max(0, fromAudio.volume - volumeStep);
         } else if (fromAudio) {
             fromAudio.pause();
             fromAudio.volume = 0;
         }
 
-        // Raise the "to" audio
         if (toAudio) {
             if (toAudio.paused) {
                 toAudio.volume = 0;
                 toAudio.play();
             }
-            if (toAudio.volume < 0.3) {
+            if (toAudio.volume < (targetVol - volumeStep)) {
                 toAudio.volume += volumeStep;
             } else {
-                toAudio.volume = 0.3;
-                clearInterval(fadeInterval); // Transition complete
+                toAudio.volume = targetVol;
+                clearInterval(fadeInterval);
             }
-        }
-        
-        // If 'from' is done and 'to' is at target, stop
-        if ((!fromAudio || fromAudio.paused) && (!toAudio || toAudio.volume >= 0.3)) {
-            clearInterval(fadeInterval);
         }
     }, intervalTime);
 }
