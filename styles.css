@@ -264,7 +264,86 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease 0.5s forwards; /* 0.5s delay so photo appears first */
 }
+.game-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #87ae73; /* Same background */
+    display: none; /* Hidden initially */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 500; /* Above letter, below celebration */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 
+.game-instruction {
+    color: #FFFDD0;
+    font-family: 'Georgia', serif;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* The Dog Photo Styling */
+.dog-photo {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%; /* Circle shape */
+    border: 5px solid #FFFDD0;
+    cursor: grab; /* The "Hand" Cursor */
+    transition: transform 0.1s ease; /* Fast bounce back */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* The "Smush" Effect Class */
+.dog-photo:active, .dog-photo.smushed {
+    transform: scale(0.90); /* Shrink to 90% */
+    cursor: grabbing; /* The "Gripping Hand" Cursor */
+}
+
+/* --- THE HEART METER --- */
+.heart-meter-container {
+    position: relative;
+    font-size: 60px; /* Size of the heart */
+    margin-bottom: 30px;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heart-bg {
+    color: rgba(255, 255, 255, 0.3); /* Faint grey/white heart */
+    position: absolute;
+    z-index: 1;
+}
+
+.heart-fill-wrapper {
+    position: absolute;
+    bottom: 0; /* Grow from bottom */
+    left: 0;
+    width: 100%;
+    height: 0%; /* Starts Empty! */
+    overflow: hidden; /* Hides the top part of the pink heart */
+    z-index: 2;
+    transition: height 0.2s ease; /* Smooth fill */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Keep heart anchored to bottom */
+}
+
+.heart-fill {
+    color: #FF69B4; /* Hot Pink */
+    /* This ensures the heart text stays in place while wrapper shrinks */
+    height: 70px; 
+    display: flex;
+    align-items: center;
+}
 /* Animations */
 @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
