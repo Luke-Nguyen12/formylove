@@ -198,7 +198,11 @@ body {
 .game-instruction {
     color: #FFFDD0;
     font-family: 'Georgia', serif;
-    margin-bottom: 40px;
+    /* [CHANGED] Increases space at the top, pushing text & heart down */
+    margin-top: 100px; 
+    
+    /* [CHANGED] Space between text and heart */
+    margin-bottom: 30px;
     font-size: 36px;
     text-align: center;
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);

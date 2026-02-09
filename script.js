@@ -56,16 +56,42 @@ function hoverHandler() {
 }
 
 function moveNoButton() {
-    // Move to body to escape container
+    // 1. Move to body so it can fly anywhere
     if (noButton.parentNode !== document.body) {
         document.body.appendChild(noButton);
         noButton.style.position = 'fixed'; 
         noButton.style.zIndex = '99999'; 
     }
 
-    const x = Math.random() * (window.innerWidth - noButton.offsetWidth - 50);
-    const y = Math.random() * (window.innerHeight - noButton.offsetHeight - 50);
+    // 2. Define the "Exclusion Zone" (The Center Paper)
+    // The paper is approx 500px wide x 350px tall. 
+    // We add a buffer so the button doesn't even touch the edge.
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const buffer = 280; // 250px (half width) + 30px extra space
+    const bufferY = 200; // 175px (half height) + 25px extra space
 
+    let x, y;
+    let safe = false;
+    let attempts = 0;
+
+    // 3. Keep trying random spots until one is safe (not in the center)
+    while (!safe && attempts < 50) {
+        x = Math.random() * (window.innerWidth - noButton.offsetWidth - 50);
+        y = Math.random() * (window.innerHeight - noButton.offsetHeight - 50);
+
+        // Check if the coordinates are inside the exclusion box
+        const inX = x > (centerX - buffer) && x < (centerX + buffer);
+        const inY = y > (centerY - bufferY) && y < (centerY + bufferY);
+
+        // If it's NOT in X or NOT in Y, it's safe!
+        if (!inX || !inY) {
+            safe = true;
+        }
+        attempts++;
+    }
+
+    // 4. Apply the safe coordinates
     noButton.style.left = `${x}px`;
     noButton.style.top = `${y}px`;
 }
