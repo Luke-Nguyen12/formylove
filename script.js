@@ -289,13 +289,13 @@ function runPickupLineSequence() {
     const letterHeader = document.querySelector('.letter-header');
     
     // Set the text
-    const pickupText = "You're the paw-fect match for me...";
+
     pickupEl.innerHTML = pickupText;
     
     // 1. Show Pickup Line (Wait 1s after letter fade starts)
     setTimeout(() => {
         pickupEl.style.opacity = '1';
-    }, 500);
+    }, 1000);
     
     // 2. Wait 4 seconds for reading, then Fade Out Pickup
     setTimeout(() => {
@@ -310,5 +310,5 @@ function runPickupLineSequence() {
             startTypingSequence();
         }, 1000);
         
-    }, 5000); // 1s delay + 4s reading time
+    }, 3000); // 1s delay + 4s reading time
 }
